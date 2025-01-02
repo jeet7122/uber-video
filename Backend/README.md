@@ -53,3 +53,85 @@ If the token is valid and not blacklisted, the request proceeds to the next midd
 ```
 
 This middleware ensures that only authenticated users can access protected routes by verifying the presence and validity of the token.
+
+# Captain Routes
+
+This section explains the captain routes and their functionality.
+
+## Route: `POST /captains/register`
+
+This route registers a new captain. It performs the following steps:
+
+1. **Validate Input**: It validates the input fields such as email, first name, password, and vehicle type.
+2. **Register Captain**: It calls the `registerCaptain` method from the captain controller to register the captain.
+
+### Example HTTP Request
+
+#### Request
+```http
+POST /captains/register HTTP/1.1
+Host: example.com
+Content-Type: application/json
+
+{
+    "email": "captain@example.com",
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "password": "password123",
+    "vehicle": {
+        "vehicleType": "sedan",
+        "licensePlate": "ABC123"
+    }
+}
+```
+
+#### Response (Success)
+```json
+{
+    "message": "Captain registered successfully",
+    "captain": {
+        "_id": "captain_id",
+        "email": "captain@example.com",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "vehicle": {
+            "vehicleType": "sedan",
+            "licensePlate": "ABC123"
+        }
+    }
+}
+```
+
+#### Response (Validation Error)
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid email",
+            "param": "email",
+            "location": "body"
+        },
+        {
+            "msg": "First name must be at least 3 characters long",
+            "param": "fullname.firstname",
+            "location": "body"
+        },
+        {
+            "msg": "Password must be at least 6 characters long",
+            "param": "password",
+            "location": "body"
+        },
+        {
+            "msg": "Invalid vehicle type",
+            "param": "vehicle.vehicleType",
+            "location": "body"
+        }
+    ]
+}
+```
+
+This route ensures that the input data is validated before registering a new captain.
